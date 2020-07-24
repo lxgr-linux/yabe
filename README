@@ -1,10 +1,14 @@
 # Yabe -- Yet another benchmark
 by LXGR <lxgr@protonmail.com>
 
+# Installation
+
+Copy the 'Yabe' file to /usr/bin/ .
+
 # Usage
 
 Yabm - Yet another benchmark
-Usage: ./Yabe <option> <string>
+Usage: /usr/bin/Yabe <option> <string>
    Options:
       --file <filename>  : Saves test results to a file.
       --help             : Prints this help text.
