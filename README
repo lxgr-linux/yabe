@@ -1,0 +1,10 @@
+# Yabe -- Yet another benchmark
+by LXGR <lxgr@protonmail.com>
+
+# Usage
+
+Yabm - Yet another benchmark
+Usage: ./Yabe <option> <string>
+   Options:
+      --file <filename>  : Saves test results to a file.
+      --help             : Prints this help text.
