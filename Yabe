@@ -1,0 +1,46 @@
+#!/usr/bin/python3
+import time
+import os
+import sys
+
+args=sys.argv
+
+if len(args) == 2:
+	if args[1] in ["--help", "-h"]:
+		print("Yabm - Yet another benchmark\nUsage: "+args[0]+" <option> <string>\n   Options:")
+		print("      --file <filename>  : Saves test results to a file.")
+		print("      --help             : Prints this help text.")
+		exit(0)
+	elif args[1] == "--file":
+		print(":: ERROR: An outputfile has to be given!")
+		exit(1)
+	else:
+		print(":: ERROR: '"+args[1]+"' is not a known option!")
+		exit(1)
+else:
+	print(":: Running singlecore benchmark...")
+	width, height = os.get_terminal_size()
+
+	x=time.time()
+	v=2
+
+	for i in range(30):
+		v=v**2
+		width, height = os.get_terminal_size()
+		string=' Running singlecore benchmark'+200*' '
+		print('\r('+(2-len(str(i)))*' '+str(i)+'/29)'+string[:width-19-24]+'['+i*'#'+(29-i)*'-'+'] '+(3-len(str(round((i/29)*100))))*' '+str(round((i/29)*100))+'%', end='', flush=True)
+
+	y=time.time()
+	print(":: Done!")
+	print(" Benchmark completed in "+str(y-x)+" seconds!")
+
+	if len(args) == 3:
+		if args[1] == "--file" and args[2]:
+			import datetime
+			file=open(args[2], "a")
+			file.write(os.uname()[1]+' '+str(datetime.datetime.now())+' '+str(y-x)+" seconds\n")
+			file.close
+			print(" Results written to file "+args[2])
+		else:
+			print(":: ERROR: '"+args[1]+"' is not a known option!")
+			exit(1)
