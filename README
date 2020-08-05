@@ -3,12 +3,12 @@ by LXGR <lxgr@protonmail.com>
 
 # Installation
 
-Copy the 'Yabe' file to /usr/bin/ .
+Copy the 'yabe' file to /usr/bin/ .
 
 # Usage
 
-Yabm - Yet another benchmark
-Usage: /usr/bin/Yabe <option> <string>
+Yabe - Yet another benchmark
+Usage: /usr/bin/yabe <option> <string>
    Options:
       --file <filename>  : Saves test results to a file.
       --help             : Prints this help text.
