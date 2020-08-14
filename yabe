@@ -2,6 +2,7 @@
 import time
 import os
 import sys
+import math
 
 args=sys.argv
 
@@ -23,13 +24,14 @@ else:
 
 	x=time.time()
 	v=2
+	max=29
 
 	for i in range(30):
 		v=v**2
 		width, height = os.get_terminal_size()
 		string=' Running singlecore benchmark'+200*' '
-		print('\r('+(2-len(str(i)))*' '+str(i)+'/29)'+string[:width-19-24]+'['+i*'#'+(29-i)*'-'+'] '+(3-len(str(round((i/29)*100))))*' '+str(round((i/29)*100))+'%', end='', flush=True)
-
+		pl=round(math.log(width/57 ,1.01644658))
+		print('\r('+(2-len(str(i)))*' '+str(i)+'/'+str(max)+')'+string[:width-14-pl]+'['+round((i/max)*pl)*'#'+round((pl-((i/max)*pl)))*'-'+'] '+(3-len(str(round((i/max)*100))))*' '+str(round((i/max)*100))+'%', end='', flush=True)
 	y=time.time()
 	print(":: Done!")
 	print(" Benchmark completed in "+str(y-x)+" seconds!")
