@@ -4,28 +4,47 @@ import os
 import sys
 import math
 
-args=sys.argv
+arglib={
+"__std__": {
+	"func": "help()",
+},
+"--help": {
+    "func": "help()",
+	"follow": False,
+    "subops": {},
+},
+"--file": {
+    "func": "run(True, args[argcount+1])",
+	"follow": True,
+    "subops": {},
+},
+}
 
-if len(args) == 2:
-	if args[1] in ["--help", "-h"]:
-		print("Yabe - Yet another benchmark\nUsage: "+args[0]+" <option> <string>\n   Options:")
-		print("      --file <filename>  : Saves test results to a file.")
-		print("      --help             : Prints this help text.")
-		exit(0)
-	elif args[1] == "--file":
-		print(":: ERROR: An outputfile has to be given!")
-		exit(1)
-	else:
-		print(":: ERROR: '"+args[1]+"' is not a known option!")
-		exit(1)
-else:
+def help():
+	print("Yabe - Yet another benchmark\nUsage: "+sys.argv[0]+" <option> <string>\n   Options:")
+	print("      --file <filename>  : Saves test results to a file.")
+	print("      --help             : Prints this help text.")
+
+def argbranch(args, arglib, argcount):
+    if len(args) == argcount:
+        exec(arglib["__std__"]["func"])
+    elif args[argcount] not in arglib:
+        print("Option '%s' not found!"%(args[argcount]))
+        exit(1)
+    elif arglib[args[argcount]]["follow"] and len(args) == argcount+1:
+        print("Required option missing")
+        exit(1)
+    elif len(args) == argcount+1 or arglib[args[argcount]]["subops"] == {}:
+        exec(arglib[args[argcount]]["func"])
+    else:
+        argbranch(args, arglib[args[argcount]]["subops"], argcount+1)
+
+def run(save=False, file_out=""):
 	print(":: Running singlecore benchmark...")
 	width, height = os.get_terminal_size()
-
 	x=time.time()
 	v=2
 	max=29
-
 	for i in range(30):
 		v=v**2
 		width, height = os.get_terminal_size()
@@ -35,14 +54,14 @@ else:
 	y=time.time()
 	print(":: Done!")
 	print(" Benchmark completed in "+str(y-x)+" seconds!")
+	if save:
+		import datetime
+		file=open(file_out, "a")
+		file.write(os.uname()[1]+' '+str(datetime.datetime.now())+' '+str(y-x)+" seconds\n")
+		file.close
+		print(" Results written to file", file_out)
 
-	if len(args) == 3:
-		if args[1] == "--file" and args[2]:
-			import datetime
-			file=open(args[2], "a")
-			file.write(os.uname()[1]+' '+str(datetime.datetime.now())+' '+str(y-x)+" seconds\n")
-			file.close
-			print(" Results written to file "+args[2])
-		else:
-			print(":: ERROR: '"+args[1]+"' is not a known option!")
-			exit(1)
+try:
+	argbranch(sys.argv, arglib, 1)
+except KeyboardInterrupt:
+	print("KeyboardInterrupt")
